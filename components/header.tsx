@@ -39,7 +39,7 @@ export function Header() {
                             <NavigationMenuItem>
                                 <NavigationMenuLink asChild>
                                     <Link href="/contact" className={navigationMenuTriggerStyle()}>
-                                        Contact
+                                        Contact1
                                     </Link>
                                 </NavigationMenuLink>
                             </NavigationMenuItem>
