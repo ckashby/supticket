@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
-import { Sun, Moon } from "lucide-react"
+import { Sun, Moon, Menu, X } from "lucide-react"
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils"
 
 export function Header() {
     const [isDark, setIsDark] = useState(false)
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
     useEffect(() => {
         const theme = localStorage.getItem('theme')
@@ -28,6 +29,14 @@ export function Header() {
         setIsDark(newIsDark)
         localStorage.setItem('theme', newIsDark ? 'dark' : 'light')
         document.documentElement.classList.toggle('dark', newIsDark)
+    }
+
+    const toggleMobileMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen)
+    }
+
+    const closeMobileMenu = () => {
+        setIsMobileMenuOpen(false)
     }
 
     return (
@@ -65,6 +74,16 @@ export function Header() {
                         </NavigationMenuList>
                     </NavigationMenu>
                 </div>
+
+                {/* Mobile menu button */}
+                <button
+                    onClick={toggleMobileMenu}
+                    className="inline-flex items-center justify-center rounded-md p-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none md:hidden"
+                    aria-label="Toggle mobile menu"
+                >
+                    {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+                </button>
+
                 <div className="flex flex-1 items-center justify-end space-x-2">
                     <button
                         onClick={toggleTheme}
@@ -75,6 +94,42 @@ export function Header() {
                     </button>
                 </div>
             </div>
+
+            {/* Mobile menu */}
+            {isMobileMenuOpen && (
+                <div className="md:hidden">
+                    <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t bg-background">
+                        <Link
+                            href="/"
+                            className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+                            onClick={closeMobileMenu}
+                        >
+                            Home
+                        </Link>
+                        <Link
+                            href="/products"
+                            className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+                            onClick={closeMobileMenu}
+                        >
+                            Products
+                        </Link>
+                        <Link
+                            href="/about"
+                            className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+                            onClick={closeMobileMenu}
+                        >
+                            About
+                        </Link>
+                        <Link
+                            href="/contact"
+                            className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+                            onClick={closeMobileMenu}
+                        >
+                            Contact
+                        </Link>
+                    </div>
+                </div>
+            )}
         </header>
     )
 }
