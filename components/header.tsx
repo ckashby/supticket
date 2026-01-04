@@ -1,5 +1,8 @@
-import React from "react"
+"use client"
+
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
+import { Sun, Moon } from "lucide-react"
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -11,6 +14,22 @@ import {
 import { cn } from "@/lib/utils"
 
 export function Header() {
+    const [isDark, setIsDark] = useState(false)
+
+    useEffect(() => {
+        const theme = localStorage.getItem('theme')
+        const isDarkMode = theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        setIsDark(isDarkMode)
+        document.documentElement.classList.toggle('dark', isDarkMode)
+    }, [])
+
+    const toggleTheme = () => {
+        const newIsDark = !isDark
+        setIsDark(newIsDark)
+        localStorage.setItem('theme', newIsDark ? 'dark' : 'light')
+        document.documentElement.classList.toggle('dark', newIsDark)
+    }
+
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-14 items-center">
@@ -45,6 +64,15 @@ export function Header() {
                             </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
+                </div>
+                <div className="flex flex-1 items-center justify-end space-x-2">
+                    <button
+                        onClick={toggleTheme}
+                        className="inline-flex items-center justify-center rounded-md p-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none"
+                        aria-label="Toggle theme"
+                    >
+                        {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                    </button>
                 </div>
             </div>
         </header>
